@@ -1,7 +1,10 @@
 package web.mysql.util;
 
+import java.io.FileReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.Properties;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,29 +13,39 @@ import java.sql.SQLException;
 public class JDBCUtils
 {
 	private JDBCUtils() {}
-	private static Connection con;
+	private static String driver;
+	private static String url;
+	private static String user;
+	private static String password;
 	
 	static 
 	{
 		try
 		{
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/day16";
-			String usr = "root";
-			String pwd = "123456";
-			con = DriverManager.getConnection(url, usr, pwd);
-			
+			Properties props = new Properties();
+			Reader is = new FileReader("db.properties");
+			props.load(is);
+			driver = props.getProperty("driverClass");
+			url = props.getProperty("url");
+			user = props.getProperty("user");
+			password = props.getProperty("password");
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeException(e + "连接失败");
+			throw new RuntimeException(e);
 		}
 		
 	}
 	
 	public static Connection getConnection()
 	{
-		return con;
+		try {
+			Class.forName(driver);
+			Connection conn = DriverManager.getConnection(url, user, password);
+			return conn;
+		} catch (Exception e) {
+			throw new RuntimeException(e + "连接失败");
+		}
 	}
 	
 	public static void close(Connection con, Statement stmt)
