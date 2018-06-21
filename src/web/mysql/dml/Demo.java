@@ -18,6 +18,10 @@ public class Demo {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(url, usr, pwd);
+			stmt = conn.createStatement();
+			String sql = "CREATE TABLE boss(id INT PRIMARY KEY, NAME VARCHAR(20), gender VARCHAR(10))";
+			int count = stmt.executeUpdate(sql);
+			System.out.println(count);
 			
 		} catch (Exception e){
 			e.printStackTrace();
