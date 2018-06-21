@@ -16,11 +16,16 @@ public class Demo {
 		Statement stmt = null;
 		Connection conn = null;
 		try {
+			//注册驱动程序
 			Class.forName("com.mysql.jdbc.Driver");
+			//获取连接
 			conn = DriverManager.getConnection(url, usr, pwd);
+			//创建执行语句
 			stmt = conn.createStatement();
+			//设定执行语句并执行
 			String sql = "CREATE TABLE boss(id INT PRIMARY KEY, NAME VARCHAR(20), gender VARCHAR(10))";
 			int count = stmt.executeUpdate(sql);
+			//查看返回结果
 			System.out.println(count);
 			
 		} catch (Exception e){
